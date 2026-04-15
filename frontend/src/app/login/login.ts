@@ -16,6 +16,28 @@ export class Login {
   rPassword = '';
 
   sendLogin() {
-    console.log("Try to login with:");
+    if (this.password != this.rPassword) {
+      console.log("Different password");
+      alert("Passwords must be the same!")
+      return;
+    }
+
+    const sendData = {
+      email: this.email,
+      password: this.password
+    };
+
+    console.log("Try to authenticate");
+
+    this.http.post('http://localhost:8080/api/login', sendData)
+      .subscribe({
+        next: (answer) => {
+          console.log("Login successful")
+        },
+        error: (e) => {
+          console.error("Authentication error: ", e);
+        }
+      })
+
   }
 }
