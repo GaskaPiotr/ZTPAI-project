@@ -2,17 +2,17 @@
   <h1>Login Form</h1>
   <div>
     <label for="email">Email: </label>
-    <input id="email" type="email"/>
+    <input name="email" type="email" [(ngModel)]="email"/>
   </div>
   <div>
     <label for="password">Password: </label>
-    <input id="password" type="password"/>
+    <input name="password" type="password" [(ngModel]="password"/>
   </div>
   <div>
     <label for="rPassword">Repeat Password: </label>
-    <input id="rPassword" type="password"/>
+    <input name="rPassword" type="password" [(ngModel)]="rPassword"/>
   </div>
   <div>
-    <input type="submit" value="Login"/>
+    <button (click)="sendLogin()">Login</button>
   </div>
 </form>
