@@ -13,14 +13,8 @@ export class Login {
 
   email = '';
   password = '';
-  rPassword = '';
 
   sendLogin() {
-    if (this.password != this.rPassword) {
-      console.log("Different password");
-      alert("Passwords must be the same!")
-      return;
-    }
 
     const sendData = {
       email: this.email,
