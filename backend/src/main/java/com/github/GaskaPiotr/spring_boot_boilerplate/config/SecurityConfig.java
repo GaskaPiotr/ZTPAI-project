@@ -3,6 +3,7 @@ package com.github.GaskaPiotr.spring_boot_boilerplate.config;
 import com.github.GaskaPiotr.spring_boot_boilerplate.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,9 +39,8 @@ public class SecurityConfig {
                                 "/api/v1/auth/**",
                                 "/v1/**"
                         ).permitAll()
-                        .requestMatchers(
-                                "/api/v1/users/**"
-                        ).hasAuthority("ADMIN")
+                        .requestMatchers("/api/v1/users/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "api/v1/tickets/*/resolve").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
