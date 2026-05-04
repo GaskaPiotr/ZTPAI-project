@@ -40,7 +40,7 @@ public class SecurityConfig {
                                 "/v1/**"
                         ).permitAll()
                         .requestMatchers("/api/v1/users/**").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "api/v1/tickets/*/resolve").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/tickets/*/resolve").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
