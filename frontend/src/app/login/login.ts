@@ -23,7 +23,9 @@ export class Login {
 
     console.log("Try to authenticate");
 
-    this.http.post('http://localhost:8080/api/v1/auth/login', sendData)
+    this.http.post('http://localhost:8080/api/v1/auth/login', sendData, {
+      withCredentials: true
+      })
       .subscribe({
         next: (answer) => {
           console.log("Login successful")
