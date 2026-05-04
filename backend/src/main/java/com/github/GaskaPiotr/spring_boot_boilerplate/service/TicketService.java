@@ -47,4 +47,12 @@ public class TicketService {
                 .map(ticketMapper::toResponse)
                 .toList();
     }
+
+    public void resolveTicket(Long id) {
+        Ticket ticket = ticketRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        ticket.setStatus("RESOLVED");
+        ticketRepository.save(ticket);
+    }
 }
