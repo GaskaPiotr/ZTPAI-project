@@ -10,6 +10,8 @@ import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -28,5 +30,21 @@ public class TicketService {
 
         Ticket savedTicket = ticketRepository.save(ticket);
         return ticketMapper.toResponse(savedTicket);
+    }
+
+    public List<TicketResponse> getTickets(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        List<Ticket> tickets;
+        if ("ADMIN".equalsIgnoreCase(user.getRole().getName())) {
+            tickets = ticketRepository.findAll();
+        } else {
+            tickets = ticketRepository.findByUserId(user.getId());
+        }
+
+        return tickets.stream()
+                .map(ticketMapper::toResponse)
+                .toList();
     }
 }
