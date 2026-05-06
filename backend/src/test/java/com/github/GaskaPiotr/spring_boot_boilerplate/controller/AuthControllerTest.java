@@ -1,6 +1,8 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.controller;
 
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResponse;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginResult;
 import com.github.GaskaPiotr.spring_boot_boilerplate.service.AuthService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,10 +39,14 @@ class AuthControllerTest {
 
         LoginRequest request = new LoginRequest(email, password);
 
-        String response = "test-token";
+        String token = "test-token";
+
+        LoginResponse response = new LoginResponse(email, "USER");
+
+        LoginResult result = new LoginResult(token, response);
 
         ResponseCookie cookie = ResponseCookie.from("jwt-token")
-                .value(response)
+                .value(token)
                 .domain("localhost")
                 .maxAge(Duration.ofSeconds(360))
                 .httpOnly(true)
@@ -48,20 +54,20 @@ class AuthControllerTest {
                 .path("/")
                 .build();
 
-        when(authService.login(request)).thenReturn(response);
+        when(authService.login(request)).thenReturn(result);
 
 
         // Act
 
-        ResponseEntity<Void> result = authController.login(request);
+        ResponseEntity<LoginResponse> authResult = authController.login(request);
 
         // Assert
 
         // 1. Check the status code
-        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(HttpStatus.OK, authResult.getStatusCode());
 
         // 2. Check the header cookie
-        assertEquals(cookie.toString(), result.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
+        assertEquals(cookie.toString(), authResult.getHeaders().getFirst(HttpHeaders.SET_COOKIE));
 
         // 3. Check the delegation to service
         verify(authService).login(request);
