@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-login',
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './login.scss',
 })
 export class Login {
-  http = inject(HttpClient);
+  authService = inject(Auth);
 
   email = '';
   password = '';
@@ -23,9 +23,7 @@ export class Login {
 
     console.log("Try to authenticate");
 
-    this.http.post('http://localhost:8080/api/v1/auth/login', sendData, {
-      withCredentials: true
-      })
+    this.authService.login(sendData)
       .subscribe({
         next: (answer) => {
           console.log("Login successful")
