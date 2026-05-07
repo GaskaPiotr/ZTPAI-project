@@ -1,1 +1,41 @@
-<p>tickets works!</p>
+<div class="tickets-container">
+  <h2>Ticket System</h2>
+
+  <table border="1" cellpadding="10" style="margin-top: 20px; width: 100%;">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th *ngIf="isAdmin">Author</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ticket of tickets">
+      <td>{{ ticket.id }}</td>
+      <td>{{ ticket.title }}</td>
+      <td>{{ ticket.description }}</td>
+
+      <td>
+        <strong [style.color]="ticket.status === 'OPEN' ? 'red' : 'green'">
+          {{ ticket.status }}
+        </strong>
+      </td>
+
+      <td *ngIf="isAdmin">{{ ticket.authorEmail }}</td>
+
+      <td>
+        <button
+          *ngIf="isAdmin && ticket.status === 'OPEN'"
+          (click)="resolve(ticket.id)">
+          Resolve
+        </button>
+
+        <span *ngIf="ticket.status === 'RESOLVED'">Completed</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
