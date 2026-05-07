@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './register.scss',
 })
 export class Register {
-  http = inject(HttpClient);
+  authService = inject(Auth);
 
   email = '';
   password = '';
@@ -29,7 +29,7 @@ export class Register {
 
     console.log("Try to authenticate");
 
-    this.http.post('http://localhost:8080/api/v1/auth/register', sendData)
+    this.authService.register(sendData)
       .subscribe({
         next: (answer) => {
           console.log("Register successful")
