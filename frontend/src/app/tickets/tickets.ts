@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Ticket } from '../services/ticket';
@@ -14,6 +14,7 @@ import { Auth } from '../services/auth';
 export class Tickets implements OnInit {
   ticketService = inject(Ticket);
   authService = inject(Auth);
+  cdr = inject(ChangeDetectorRef);
   tickets: Ticket[] = [];
   newTicketTitle = '';
   newTicketDescription = '';
@@ -24,7 +25,10 @@ export class Tickets implements OnInit {
 
   loadTickets() {
     this.ticketService.getTickets().subscribe({
-      next: (data) => this.tickets = data,
+      next: (data) =>  {
+        this.tickets = data,
+        this.cdr.detectChanges();
+      },
       error: (err) => console.error("Error loading tickets", err)
     });
   }
