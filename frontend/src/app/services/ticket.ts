@@ -24,4 +24,8 @@ export class Ticket {
   resolveTicket(id: number): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/${id}/resolve`, {}, { withCredentials: true });
   }
+
+  addTicket(ticket: { title: string; description: string }): Observable<Ticket> {
+    return this.http.post<Ticket>(this.apiUrl, ticket, { withCredentials: true });
+  }
 }

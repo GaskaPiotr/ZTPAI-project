@@ -1,12 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Ticket } from '../services/ticket';
 import { Auth } from '../services/auth';
 
 @Component({
   selector: 'app-tickets',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './tickets.html',
   styleUrl: './tickets.scss',
 })
@@ -14,6 +15,8 @@ export class Tickets implements OnInit {
   ticketService = inject(Ticket);
   authService = inject(Auth);
   tickets: Ticket[] = [];
+  newTicketTitle = '';
+  newTicketDescription = '';
 
   ngOnInit() {
     this.loadTickets();
@@ -23,6 +26,28 @@ export class Tickets implements OnInit {
     this.ticketService.getTickets().subscribe({
       next: (data) => this.tickets = data,
       error: (err) => console.error("Error loading tickets", err)
+    });
+  }
+
+  createTicket() {
+    if (!this.newTicketTitle.trim() || !this.newTicketDescription.trim()) {
+      alert("Title and description cannot be empty!");
+      return;
+    }
+
+    const newTicket = {
+      title: this.newTicketTitle,
+      description: this.newTicketDescription
+    };
+
+    this.ticketService.addTicket(newTicket).subscribe({
+      next: () => {
+        console.log("Ticket created successfully!");
+        this.newTicketTitle = '';
+        this.newTicketDescription = '';
+        this.loadTickets();
+      },
+      error: (err) => console.error("Error creating ticket", err)
     });
   }
 
