@@ -17,7 +17,7 @@ export class Auth {
   userRole: string | null = localStorage.getItem('role');
 
   login(data: any) {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data, { withCredentials: true }).pipe(
       tap(response => {
         this.userRole = response.role;
         localStorage.setItem('role', response.role);
