@@ -4,10 +4,12 @@ import com.github.GaskaPiotr.spring_boot_boilerplate.dto.TicketRequest;
 import com.github.GaskaPiotr.spring_boot_boilerplate.dto.TicketResponse;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Ticket;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
+import com.github.GaskaPiotr.spring_boot_boilerplate.event.TicketCreatedEvent;
 import com.github.GaskaPiotr.spring_boot_boilerplate.mapper.TicketMapper;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.TicketRepository;
 import com.github.GaskaPiotr.spring_boot_boilerplate.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +20,7 @@ public class TicketService {
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
     private final TicketMapper ticketMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public TicketResponse addTicket(TicketRequest request, String email) {
         User user = userRepository.findByEmail(email)
@@ -29,6 +32,15 @@ public class TicketService {
         ticket.setUser(user);
 
         Ticket savedTicket = ticketRepository.save(ticket);
+
+        TicketCreatedEvent event = new TicketCreatedEvent(
+                savedTicket.getId(),
+                savedTicket.getTitle(),
+                savedTicket.getUser().getEmail()
+        );
+
+        eventPublisher.publishEvent(event);
+
         return ticketMapper.toResponse(savedTicket);
     }
 
