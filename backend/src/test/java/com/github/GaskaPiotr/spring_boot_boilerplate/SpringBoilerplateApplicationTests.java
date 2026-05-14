@@ -18,12 +18,21 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
+
+import java.util.Locale;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestRestTemplate
+@TestPropertySource(properties = {
+		"JWT_SECRET_KEY=test-secret-key-that-is-long-enough-for-hmac",
+		"JWT_EXPIRATION=600000",
+		"ADMIN_EMAIL=example@example.com",
+		"ADMIN_PASSWORD=AdminExamplePassword123"
+})
 class SpringBoilerplateApplicationTests {
 
 	@Autowired
