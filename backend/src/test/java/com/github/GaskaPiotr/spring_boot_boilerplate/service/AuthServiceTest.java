@@ -52,7 +52,11 @@ class AuthServiceTest {
         String password = "123456";
         LoginRequest request = new LoginRequest(email, password);
 
+        Role role = new Role();
+        role.setName("USER");
+
         User testUser = new User(email, password);
+        testUser.setRole(role);
 
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(testUser));
 
@@ -124,7 +128,11 @@ class AuthServiceTest {
 
         LoginRequest request = new LoginRequest(email, password);
 
+        Role role = new Role();
+        role.setName("USER");
+
         User user = new User();
+        user.setRole(role);
 
         when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
 

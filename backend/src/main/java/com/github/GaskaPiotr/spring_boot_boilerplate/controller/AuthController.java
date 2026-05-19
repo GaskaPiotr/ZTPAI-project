@@ -1,8 +1,6 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.controller;
 
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.*;
 import com.github.GaskaPiotr.spring_boot_boilerplate.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,10 +26,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest request) {
-        String token = authService.login(request);
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+        LoginResult result = authService.login(request);
+
         ResponseCookie cookie = ResponseCookie.from("jwt-token")
-                .value(token)
+                .value(result.token())
                 .domain("localhost")
                 .maxAge(Duration.ofMillis(jwtExpiration))
                 .httpOnly(true)
@@ -42,7 +41,7 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .build();
+                .body(result.responseBody());
     }
 
     @PostMapping("/logout")

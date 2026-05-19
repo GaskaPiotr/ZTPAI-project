@@ -1,0 +1,54 @@
+<div class="tickets-container">
+  <h2>Ticket System</h2>
+
+  <div class="create-ticket-section" *ngIf="!isAdmin" style="margin-bottom: 20px; padding: 15px; border: 1px solid #ccc;">
+    <h3>Create a New Ticket</h3>
+    <div style="margin-bottom: 10px;">
+      <label for="title">Title: </label>
+      <input type="text" id="title" name="title" [(ngModel)]="newTicketTitle" placeholder="Brief summary of the issue" style="width: 100%;">
+    </div>
+    <div style="margin-bottom: 10px;">
+      <label for="description">Description: </label>
+      <textarea id="description" name="description" [(ngModel)]="newTicketDescription" rows="3" placeholder="Detailed description" style="width: 100%;"></textarea>
+    </div>
+    <button (click)="createTicket()">Submit Ticket</button>
+  </div>
+
+  <table border="1" cellpadding="10" style="margin-top: 20px; width: 100%;">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th *ngIf="isAdmin">Author</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let ticket of tickets">
+      <td>{{ ticket.id }}</td>
+      <td>{{ ticket.title }}</td>
+      <td>{{ ticket.description }}</td>
+
+      <td>
+        <strong [style.color]="ticket.status === 'OPEN' ? 'red' : 'green'">
+          {{ ticket.status }}
+        </strong>
+      </td>
+
+      <td *ngIf="isAdmin">{{ ticket.authorEmail }}</td>
+
+      <td>
+        <button
+          *ngIf="isAdmin && ticket.status === 'OPEN'"
+          (click)="resolve(ticket.id)">
+          Resolve
+        </button>
+
+        <span *ngIf="ticket.status === 'RESOLVED'">Completed</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

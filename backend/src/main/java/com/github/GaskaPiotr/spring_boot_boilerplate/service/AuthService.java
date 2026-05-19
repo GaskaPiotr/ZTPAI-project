@@ -1,8 +1,6 @@
 package com.github.GaskaPiotr.spring_boot_boilerplate.service;
 
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.LoginRequest;
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterRequest;
-import com.github.GaskaPiotr.spring_boot_boilerplate.dto.RegisterResponse;
+import com.github.GaskaPiotr.spring_boot_boilerplate.dto.*;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.Role;
 import com.github.GaskaPiotr.spring_boot_boilerplate.entity.User;
 import com.github.GaskaPiotr.spring_boot_boilerplate.exception.RoleNotFoundException;
@@ -39,15 +37,15 @@ public class AuthService {
         this.roleRepository = roleRepository;
     }
 
-    public String login(LoginRequest request) {
+    public LoginResult login(LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.email(), request.password())
         );
 
         User user = userRepository.findByEmail(request.email())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return jwtService.generateToken(user);
+        LoginResponse responseBody = new LoginResponse(user.getEmail(), user.getRole().getName());
+        return new LoginResult(jwtService.generateToken(user), responseBody);
     }
     
     public RegisterResponse register(RegisterRequest request) {
