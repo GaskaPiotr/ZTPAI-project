@@ -4,8 +4,14 @@ Projekt składa się z trzech części: **bazy danych** (Docker), **backendu** (
 Uruchamiaj je **w tej kolejności**.
 
 ---
+## 1. Plik .env (KLUCZOWE)
+Aplikacja nie włączy się bez pliku .env z odpowiednimi zmiennymi
 
-## 1. Baza danych — Docker Compose
+1. W folderze backend znajdź plik rename.env
+2. Zmień nazwę pliku z rename.env na .env
+3. Zmień wartości zmiennych na bezpieczne
+
+## 2. Baza danych — Docker Compose
 
 Przejdź do folderu backendu i uruchom kontener z bazą danych:
 
@@ -25,7 +31,7 @@ docker ps
 
 ---
 
-## 2. Backend — Spring Boot (IntelliJ IDEA)
+## 3. Backend — Spring Boot (IntelliJ IDEA)
 
 Otwórz projekt w **IntelliJ IDEA**, a następnie uruchom aplikację jednym z poniższych sposobów:
 
@@ -44,7 +50,7 @@ cd backend
 
 ---
 
-## 3. Frontend — Angular
+## 4. Frontend — Angular
 
 W **osobnym terminalu** przejdź do folderu frontendu i zainstaluj zależności (tylko przy pierwszym uruchomieniu), a następnie uruchom serwer deweloperski:
 
